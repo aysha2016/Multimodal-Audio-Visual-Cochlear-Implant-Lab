@@ -36,17 +36,25 @@ class SpeechAudioEngine {
   public onWordBoundary?: (word: string, index: number) => void;
 
   constructor() {
-    this.loadVoices();
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = () => {
-        this.loadVoices();
-      };
+    try {
+      this.loadVoices();
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          this.loadVoices();
+        };
+      }
+    } catch (e) {
+      console.warn('SpeechSynthesis init warning:', e);
     }
   }
 
   private loadVoices() {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    this.availableVoices = window.speechSynthesis.getVoices() || [];
+    try {
+      if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+      this.availableVoices = window.speechSynthesis.getVoices() || [];
+    } catch {
+      this.availableVoices = [];
+    }
   }
 
   public getVoices(): SpeechSynthesisVoice[] {

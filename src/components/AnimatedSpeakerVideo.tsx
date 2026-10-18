@@ -170,7 +170,6 @@ export const AnimatedSpeakerVideo: React.FC<AnimatedSpeakerVideoProps> = ({
   useEffect(() => {
     setImageLoaded(false);
     const img = new Image();
-    img.crossOrigin = 'anonymous';
     img.src = speakerImgSrc;
     img.onload = () => {
       baseImgRef.current = img;
@@ -179,10 +178,18 @@ export const AnimatedSpeakerVideo: React.FC<AnimatedSpeakerVideoProps> = ({
       const gl = glRef.current;
       const texture = textureRef.current;
       if (gl && texture) {
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        try {
+          gl.bindTexture(gl.TEXTURE_2D, texture);
+          gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        } catch (e) {
+          console.warn('WebGL texture binding error:', e);
+        }
       }
+    };
+    img.onerror = (e) => {
+      console.warn('Failed to load speaker image:', speakerImgSrc, e);
+      setImageLoaded(true);
     };
   }, [speakerImgSrc]);
 
@@ -486,12 +493,18 @@ export const AnimatedSpeakerVideo: React.FC<AnimatedSpeakerVideoProps> = ({
       </div>
 
       {/* Main Continuous Deformed Canvas (WebGL Hardware-Accelerated 2D Mesh) */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center">
+      <div className="absolute inset-0 z-10 flex items-center justify-center overflow-hidden bg-slate-900">
+        {/* Base Fallback Image: ensures speaker face is ALWAYS visible immediately */}
+        <img
+          src={speakerImgSrc}
+          alt={targetSpeaker}
+          className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+        />
         <canvas
           ref={glCanvasRef}
           width={1376}
           height={768}
-          className="w-full h-full object-cover block"
+          className="absolute inset-0 w-full h-full object-cover block"
         />
         {/* Transparent Landmark Overlay Canvas (100% synchronized with WebGL vertices) */}
         <canvas
