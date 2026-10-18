@@ -1,0 +1,6 @@
+{
+  "name": "CI-AI Research Lab",
+  "description": "Multimodal Audio-Visual Cochlear Implant Research Prototype for speech understanding in noise.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
