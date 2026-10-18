@@ -1,6 +1,7 @@
 import React from 'react';
 import { Users } from 'lucide-react';
 import { SimulationState, TargetSpeaker } from '../types';
+import { speaker1MouthImg, speaker2MouthImg } from '../assets/images';
 
 interface TargetSpeakerProps {
   state: SimulationState;
@@ -19,8 +20,8 @@ export const TargetSpeakerPanel: React.FC<TargetSpeakerProps> = ({
   ];
 
   const speakerImg = state.targetSpeaker === 'Speaker 2' 
-    ? '/src/assets/images/speaker_2_mouth_1792167604471.jpg' 
-    : '/src/assets/images/speaker_1_mouth_1792167604192.jpg';
+    ? speaker2MouthImg 
+    : speaker1MouthImg;
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">

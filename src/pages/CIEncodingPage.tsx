@@ -1,6 +1,6 @@
-import React from 'react';
 import { Cpu, Sliders, ArrowRight, Activity, Zap } from 'lucide-react';
 import { SimulationState, CIStrategy, CurrentSpread } from '../types';
+import { cochleaDiagramImg } from '../assets/images';
 
 interface CIEncodingProps {
   state: SimulationState;
@@ -71,7 +71,7 @@ export const CIEncodingPage: React.FC<CIEncodingProps> = ({ state, onUpdateState
 
           <div className="relative rounded-xl overflow-hidden bg-white border border-slate-200 aspect-16/10 flex items-center justify-center p-2 shadow-inner">
             <img
-              src="/src/assets/images/cochlea_implant_diagram_1792167605412.jpg"
+              src={cochleaDiagramImg}
               alt="Cochlea Diagram with 22 electrodes"
               className="max-h-full max-w-full object-contain"
               referrerPolicy="no-referrer"

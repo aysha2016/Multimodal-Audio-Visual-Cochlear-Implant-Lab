@@ -1,6 +1,7 @@
 import React from 'react';
 import { Activity, Eye, Network, Cpu, ArrowRight } from 'lucide-react';
 import { SimulationState } from '../types';
+import { speaker1MouthImg } from '../assets/images';
 
 interface PipelineProps {
   state: SimulationState;
@@ -94,7 +95,7 @@ export const MultimodalPipelineCard: React.FC<PipelineProps> = ({ state }) => {
             <div className="grid grid-cols-2 gap-1.5 h-16 mb-2.5">
               <div className="rounded-md overflow-hidden bg-slate-900 border border-slate-200 relative">
                 <img
-                  src="/src/assets/images/speaker_1_mouth_1792167604192.jpg"
+                  src={speaker1MouthImg}
                   alt="Mouth cropped"
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"

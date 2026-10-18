@@ -3,6 +3,7 @@ import { Eye, Sliders, CheckCircle2, RefreshCw, BarChart2, Shield } from 'lucide
 import { SimulationState } from '../types';
 import { getLipLandmarks } from '../services/simulationEngine';
 import { AnimatedSpeakerVideo } from '../components/AnimatedSpeakerVideo';
+import { speaker1MouthImg, speaker2MouthImg } from '../assets/images';
 
 interface LipTrackingLabProps {
   state: SimulationState;
@@ -23,8 +24,8 @@ export const LipTrackingLab: React.FC<LipTrackingLabProps> = ({ state, onUpdateS
   );
 
   const speakerImg = state.targetSpeaker === 'Speaker 2' 
-    ? '/src/assets/images/speaker_2_mouth_1792167604471.jpg' 
-    : '/src/assets/images/speaker_1_mouth_1792167604192.jpg';
+    ? speaker2MouthImg 
+    : speaker1MouthImg;
 
   // Kinematic Lip movement energy
   const movementEnergy = Math.min(1.0, mouthOpening * 1.6 + 0.1 * Math.sin(state.currentTime * 5));

@@ -3,6 +3,7 @@ import { Play, Pause, Maximize2, Volume2, VolumeX, Sliders } from 'lucide-react'
 import { SimulationState } from '../types';
 import { getLipLandmarks, AnatomicalLipMesh } from '../services/simulationEngine';
 import { speechAudioEngine } from '../services/speechAudioEngine';
+import { speaker1MouthImg, speaker2MouthImg } from '../assets/images';
 
 interface AnimatedSpeakerVideoProps {
   state: SimulationState;
@@ -88,8 +89,8 @@ export const AnimatedSpeakerVideo: React.FC<AnimatedSpeakerVideoProps> = ({
   } = state;
 
   const speakerImgSrc = targetSpeaker === 'Speaker 2'
-    ? '/src/assets/images/speaker_2_mouth_1792167604471.jpg'
-    : '/src/assets/images/speaker_1_mouth_1792167604192.jpg';
+    ? speaker2MouthImg
+    : speaker1MouthImg;
 
   // Compute unified anatomical lip coordinates and 2D mesh kinematics
   const lipMesh: AnatomicalLipMesh = getLipLandmarks(
