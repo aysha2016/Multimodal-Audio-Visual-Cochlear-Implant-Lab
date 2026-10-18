@@ -64,6 +64,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
+// Global window error catch to prevent unhandled runtime errors from freezing the page
+if (typeof window !== 'undefined') {
+  window.addEventListener('error', (event) => {
+    console.warn('Global captured error:', event.message, event.filename);
+  });
+  window.addEventListener('unhandledrejection', (event) => {
+    console.warn('Global unhandled rejection:', event.reason);
+  });
+}
+
 const rootElement = document.getElementById('root');
 if (rootElement) {
   createRoot(rootElement).render(

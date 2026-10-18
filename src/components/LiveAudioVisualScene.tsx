@@ -318,8 +318,8 @@ export const LiveAudioVisualScene: React.FC<LiveAVSceneProps> = ({
             </div>
           </div>
 
-          {/* Instant Audio Audition Switcher Bar: Clean vs Noisy vs Enhanced */}
-          <div className="bg-slate-100/80 p-1 rounded-xl mb-2 flex items-center justify-between gap-1 text-[11px] font-semibold">
+          {/* Instant Audio Audition Switcher Bar: Clean vs Noisy vs Enhanced vs CI Vocoder */}
+          <div className="bg-slate-100/90 p-1.5 rounded-xl mb-2.5 flex items-center justify-between gap-1 text-[11px] font-semibold border border-slate-200/60">
             <button
               onClick={() => {
                 speechAudioEngine.init();
@@ -327,12 +327,12 @@ export const LiveAudioVisualScene: React.FC<LiveAVSceneProps> = ({
                 onUpdateState({ audioMode: 'Clean Speech' });
                 speechAudioEngine.previewCondition('clean', state.snr, state.backgroundNoise, state.targetSpeaker === 'Speaker 2' ? 'male' : 'female');
               }}
-              className={`flex-1 py-1 px-1.5 rounded-lg text-center transition-all cursor-pointer flex items-center justify-center gap-1 ${
+              className={`flex-1 py-1.5 px-2 rounded-lg text-center transition-all cursor-pointer flex items-center justify-center gap-1 ${
                 audioMode === 'Clean Speech'
-                  ? 'bg-white text-blue-600 shadow-xs font-bold border border-blue-200'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                  ? 'bg-blue-600 text-white shadow-xs font-bold'
+                  : 'text-slate-700 hover:text-slate-900 hover:bg-white/70'
               }`}
-              title="Hear pure clean human voice without noise"
+              title="Hear natural clean human speech without noise"
             >
               <span>Clean Speech</span>
             </button>
@@ -344,12 +344,12 @@ export const LiveAudioVisualScene: React.FC<LiveAVSceneProps> = ({
                 onUpdateState({ audioMode: 'Noisy Speech' });
                 speechAudioEngine.previewCondition('noisy', state.snr, state.backgroundNoise, state.targetSpeaker === 'Speaker 2' ? 'male' : 'female');
               }}
-              className={`flex-1 py-1 px-1.5 rounded-lg text-center transition-all cursor-pointer flex items-center justify-center gap-1 ${
+              className={`flex-1 py-1.5 px-2 rounded-lg text-center transition-all cursor-pointer flex items-center justify-center gap-1 ${
                 audioMode === 'Noisy Speech'
-                  ? 'bg-amber-500 text-white shadow-xs font-bold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                  ? 'bg-amber-600 text-white shadow-xs font-bold'
+                  : 'text-slate-700 hover:text-slate-900 hover:bg-white/70'
               }`}
-              title="Hear speech masked in restaurant/street noise at current SNR"
+              title="Hear speech heavily masked in restaurant/street noise at current SNR"
             >
               <span>Noisy ({state.snr > 0 ? `+${state.snr}` : state.snr}dB)</span>
             </button>
@@ -361,14 +361,26 @@ export const LiveAudioVisualScene: React.FC<LiveAVSceneProps> = ({
                 onUpdateState({ audioMode: 'Enhanced Speech', processingMode: 'Audio + Visual' });
                 speechAudioEngine.previewCondition('enhanced', state.snr, state.backgroundNoise, state.targetSpeaker === 'Speaker 2' ? 'male' : 'female');
               }}
-              className={`flex-1 py-1 px-1.5 rounded-lg text-center transition-all cursor-pointer flex items-center justify-center gap-1 ${
+              className={`flex-1 py-1.5 px-2 rounded-lg text-center transition-all cursor-pointer flex items-center justify-center gap-1 ${
                 audioMode === 'Enhanced Speech'
                   ? 'bg-purple-600 text-white shadow-xs font-bold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                  : 'text-slate-700 hover:text-slate-900 hover:bg-white/70'
               }`}
               title="Hear AI multimodal noise reduction (Audio + Visual)"
             >
               <span>AV Enhanced</span>
+            </button>
+
+            <button
+              onClick={() => {
+                speechAudioEngine.init();
+                speechAudioEngine.resume();
+                speechAudioEngine.previewCondition('ci_vocoder', state.snr, state.backgroundNoise, state.targetSpeaker === 'Speaker 2' ? 'male' : 'female');
+              }}
+              className="py-1.5 px-2 rounded-lg text-center transition-all cursor-pointer flex items-center justify-center gap-1 text-slate-700 hover:text-purple-700 hover:bg-purple-50"
+              title="Hear 22-channel Cochlear Implant pulse vocoder acoustic simulation"
+            >
+              <span>CI Vocoder</span>
             </button>
           </div>
 
