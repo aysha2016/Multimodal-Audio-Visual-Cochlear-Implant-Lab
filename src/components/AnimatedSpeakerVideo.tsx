@@ -120,7 +120,7 @@ export const AnimatedSpeakerVideo: React.FC<AnimatedSpeakerVideoProps> = ({
 
     let gl: WebGLRenderingContext | null = null;
     try {
-      gl = canvas.getContext('webgl', { antialias: true, alpha: false, preserveDrawingBuffer: false });
+      gl = canvas.getContext('webgl', { antialias: true, alpha: true, preserveDrawingBuffer: false });
     } catch {
       gl = null;
     }
@@ -170,6 +170,7 @@ export const AnimatedSpeakerVideo: React.FC<AnimatedSpeakerVideoProps> = ({
   useEffect(() => {
     setImageLoaded(false);
     const img = new Image();
+    img.crossOrigin = 'anonymous';
     img.src = speakerImgSrc;
     img.onload = () => {
       baseImgRef.current = img;

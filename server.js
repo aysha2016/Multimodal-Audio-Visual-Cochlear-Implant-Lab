@@ -3,13 +3,23 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { execSync } from "child_process";
 var __filename = fileURLToPath(import.meta.url);
 var __dirname = path.dirname(__filename);
 var app = express();
 var port = process.env.NGINX_PORT ? Number(process.env.DEFAULT_APP_PORT) || 3e3 : Number(process.env.PORT) || Number(process.env.DEFAULT_APP_PORT) || 3e3;
 var distPath = path.join(__dirname, "dist");
 var indexPath = path.join(distPath, "index.html");
-console.log(`[CI-AI Server] Initializing on port ${port}, dist: ${distPath}`);
+console.log(`[CI-AI Server] Starting on port ${port}...`);
+if (!fs.existsSync(indexPath)) {
+  console.log("[CI-AI Server] dist/index.html not found! Triggering vite build...");
+  try {
+    execSync("npx vite build", { stdio: "inherit", cwd: __dirname });
+    console.log("[CI-AI Server] Build finished successfully.");
+  } catch (err) {
+    console.error("[CI-AI Server] On-the-fly build failed:", err);
+  }
+}
 app.get(["/health", "/api/health", "/_health"], (_req, res) => {
   res.status(200).json({ status: "ok", timestamp: (/* @__PURE__ */ new Date()).toISOString() });
 });
@@ -35,12 +45,7 @@ app.get("*", (_req, res) => {
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
-    const rootIndex = path.join(__dirname, "index.html");
-    if (fs.existsSync(rootIndex)) {
-      res.sendFile(rootIndex);
-    } else {
-      res.status(200).send(`<!DOCTYPE html><html><head><title>CI-AI Research Lab</title></head><body><h1>CI-AI Research Lab</h1><p>Application is building. Please refresh in a few moments.</p></body></html>`);
-    }
+    res.status(503).send(`<!DOCTYPE html><html><head><meta http-equiv="refresh" content="3"><title>CI-AI Research Lab</title></head><body style="font-family:sans-serif;text-align:center;padding:50px;"><h2>CI-AI Research Lab</h2><p>Application is building assets. Auto-refreshing in 3 seconds...</p></body></html>`);
   }
 });
 app.listen(port, "0.0.0.0", () => {
