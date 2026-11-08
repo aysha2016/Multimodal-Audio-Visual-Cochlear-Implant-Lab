@@ -43,6 +43,20 @@
         </div>
       </div>
     </div>
+    <script>
+      // Fallback for GitHub Pages when deploying raw branch root instead of built dist
+      window.addEventListener('error', function(e) {
+        if (e.target && e.target.tagName === 'SCRIPT' && e.target.src && e.target.src.includes('/src/main.tsx')) {
+          if (window.location.hostname.endsWith('github.io')) {
+            var p = window.location.pathname;
+            if (!p.includes('/dist') && !p.includes('/docs')) {
+              var target = p.endsWith('/') ? p + 'dist/' : p + '/dist/';
+              window.location.replace(target + window.location.search + window.location.hash);
+            }
+          }
+        }
+      }, true);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
